@@ -1,11 +1,10 @@
-/**
- * @jest-environment node
- */
 
-import { describe, expect, test } from "@jest/globals"
+import * as b from "../bytes"
 
-import * as b from "~encryption/bytes"
-import { expectBuffersEqual } from "~jest"
+
+const expectBuffersEqual = (a: ArrayBuffer, b: ArrayBuffer): boolean =>
+  a.byteLength === b.byteLength &&
+  new Uint8Array(a).every((val, i) => val === new Uint8Array(b)[i]);
 
 describe("bytes", () => {
   test("get random bytes", () => {
@@ -19,7 +18,7 @@ describe("bytes", () => {
     ["🤘", [240, 159, 164, 152]]
   ])("encodeStr / decodeBytes", (str, bytes) => {
     expect(b.encodeStr(str)).toEqual(new Uint8Array(bytes))
-    expect(b.decodeBuf(new Uint8Array(bytes))).toEqual(str)
+    expect(b.decodeBuf(new Uint8Array(bytes).buffer)).toEqual(str)
   })
 
   test.each([
@@ -94,7 +93,7 @@ describe("bytes", () => {
   ])("concatArrayBuffers", (numberArrays, expected) => {
     const byteArrays = numberArrays.map((bytes) => new Uint8Array(bytes))
     const buffers = byteArrays.map((bytes) => bytes.buffer)
-    const combined = b.concatArrayBuffers(...buffers)
+    const combined = b.concatBuffers(...buffers)
     expect(combined).toEqual(new Uint8Array(expected))
   })
 })

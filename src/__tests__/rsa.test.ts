@@ -1,12 +1,5 @@
-/**
- * @jest-environment node
- */
-
-import { beforeAll, describe, expect, test } from "@jest/globals"
-
-import * as bytes from "~encryption/bytes"
-import * as rsa from "~encryption/rsa"
-import { expectBuffersEqual } from "~jest"
+import * as bytes from "../bytes"
+import * as rsa from "../rsa"
 
 const myPrivateKeyJWK = {
   alg: "RSA-OAEP-256",
@@ -36,6 +29,11 @@ const myPrivateKeyBuf = rsa.pemToArrayBuffer(myPrivateKeyPEM, "PRIVATE")
 const myPublicKeyPEM =
   "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAujnkct31H+qFk3fOrpFxkyBCYUBQP4A4SN+vWNy0yu+v9TUTpQ8T7F06Z9kft+PiBRZYVZlcWjXzp6Ke5ATaXgLu4P55UD0kKfqm+9bA6dafVfEetAsBEljRh7U7Ydr36KUjdDCBrmPnpPrvaP4MZIERgqaRPNdCYkBgy0K2aFidtH2AY3qCnpNVoMACPvKwnRDr0pLNiu35dbpXqWqkclxIRgQeutAds8EQD347GbQSyR/XCSRYHVIpuPWZAEQC6HDONm8sRZXzeDmtC3Tyc4snQOCs4TaGLkousMw2g4RbdJOUBg85PsrJ8s5Hb3WswPJYC1gaVhPXpVb3tEEUpz2ZjhFhT2JKpojXUbaLXw+fJ+1QebexNUtyu6H5NX4z2kJAJilP4M0PH669/sYRStSD1d1TrwhykPEkyLV17kpvGER56ltrM0lbMbV/kF+IwnSuQlig8OD+UxDSDvz1vn3CU63bxBD6bFT2zwT/uFCzvDsQOCLVxMLg44ReVcvDOfikglVZ/k7Bn2Q3rgNW6uY0UJ7F+jwpiJQ94xbOGcUVSELo6ph7puu5nWp/ABfDjFo3wUYvsnhY6U0CJ+0dkFEGAdTqYRaUM0D9qD+7IzDkMONTprCZiwHPXQX/QryQivUKQ9e5xzfRBub7A8pmJMvI1blw1g6nipcelavQggcCAwEAAQ==\n-----END PUBLIC KEY-----"
 const myPublicKeyBuf = rsa.pemToArrayBuffer(myPublicKeyPEM, "PUBLIC")
+
+
+const expectBuffersEqual = (a: ArrayBuffer, b: ArrayBuffer): boolean =>
+  a.byteLength === b.byteLength &&
+  new Uint8Array(a).every((val, i) => val === new Uint8Array(b)[i]);
 
 describe("rsa", () => {
   let myKeyPair: CryptoKeyPair
@@ -148,7 +146,7 @@ describe("rsa", () => {
   test("encrypt/decrypt data fails", async () => {
     const data = bytes.getRandomBytes(256)
     const encrypted = await rsa.encrypt(data, myKeyPair.publicKey)
-    void expect(rsa.decrypt(encrypted, theirKeyPair.privateKey)).rejects.toThrow()
+    await expect(rsa.decrypt(encrypted, theirKeyPair.privateKey)).rejects.toThrow()
   })
 
   test("import jwk and encrypt/decrypt", async () => {

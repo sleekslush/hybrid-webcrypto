@@ -20,8 +20,8 @@ type AesKeyHashOptions = {
 } & AesKeyOptions
 
 type AESEncryptedPayload = {
-  iv: ArrayBuffer
-  cipherText: ArrayBuffer
+  iv: BufferedBytes
+  cipherText: BufferedBytes
 }
 
 type AESKeyUsage = "encrypt" | "decrypt" | "wrapKey" | "unwrapKey"

@@ -1,13 +1,7 @@
-/**
- * @jest-environment node
- */
-
-import { beforeAll, describe, expect, test } from "@jest/globals"
-
-import * as aes from "~encryption/aes"
-import { bufFromB64, decodeBuf, encodeStr, getRandomBytes } from "~encryption/bytes"
-import * as hybrid from "~encryption/hybrid"
-import * as rsa from "~encryption/rsa"
+import * as aes from "../aes"
+import { bufFromB64, decodeBuf, encodeStr, getRandomBytes } from "../bytes"
+import * as hybrid from "../hybrid"
+import * as rsa from "../rsa"
 
 const privateKeyJWK = {
   alg: "RSA-OAEP-256",
@@ -77,7 +71,7 @@ describe("hybrid", () => {
     const data = encodeStr(secretText)
     const encryptedPayload = await hybrid.encrypt(data, keyPair.publicKey)
     const combinedBytes = hybrid.encryptedPayloadToBytes(encryptedPayload)
-    const decryptedBuf = await hybrid.decrypt(combinedBytes, keyPair.privateKey)
+    const decryptedBuf = await hybrid.decrypt(combinedBytes.buffer, keyPair.privateKey)
     const decoded = decodeBuf(decryptedBuf)
     expect(decoded).toEqual(secretText)
   })

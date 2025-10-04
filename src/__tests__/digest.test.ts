@@ -1,6 +1,4 @@
-import { describe, expect, test } from "@jest/globals"
-
-import * as digest from "~encryption/digest"
+import * as digest from "../digest"
 
 describe("digest", () => {
   test("sha256", async () => {

@@ -15,6 +15,6 @@ type HybridDecryptionOptions = HybridEncryptionOptions & {
 
 type HybridEncryptedPayload = {
   encryptedKey: ArrayBuffer
-  iv: ArrayBuffer
-  cipherText: ArrayBuffer
+  iv: BufferedBytes
+  cipherText: BufferedBytes
 }

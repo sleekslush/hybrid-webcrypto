@@ -1,5 +1,5 @@
 import * as aes from "./aes"
-import { b64FromBuf, bufFromB64, concatArrayBuffers } from "./bytes"
+import { b64FromBuf, bufFromB64, concatByteArrays } from "./bytes"
 import * as rsa from "./rsa"
 
 const RSA_ENCRYPTED_KEY_LENGTH: number = 512
@@ -11,7 +11,7 @@ export async function encryptToB64(
   options?: HybridEncryptionOptions
 ): Promise<string> {
   const encryptedBytes = await encryptToBytes(data, publicKey, options)
-  return b64FromBuf(encryptedBytes)
+  return b64FromBuf(encryptedBytes.buffer)
 }
 
 export async function encryptToBytes(
@@ -68,7 +68,7 @@ export async function decrypt(
 }
 
 export async function decryptEncryptedKey(
-  encryptedKey: ArrayBuffer,
+  encryptedKey: BufferSource,
   privateKey: CryptoKey,
   {
     rsaOaepOptions,
@@ -84,6 +84,6 @@ export async function decryptEncryptedKey(
   return await rsa.unwrapRawKey(encryptedKey, privateKey, unwrappedKeyAlgo, rsaOaepOptions)
 }
 
-export function encryptedPayloadToBytes(payload: HybridEncryptedPayload): Uint8Array {
-  return concatArrayBuffers(payload.encryptedKey, payload.iv, payload.cipherText)
+export function encryptedPayloadToBytes(payload: HybridEncryptedPayload): BufferedUint8Array {
+  return concatByteArrays(new Uint8Array(payload.encryptedKey), new Uint8Array(payload.iv), new Uint8Array(payload.cipherText))
 }

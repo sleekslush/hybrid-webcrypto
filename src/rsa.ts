@@ -46,7 +46,7 @@ export async function importPrivateKeyJWK(
 }
 
 export async function importPrivateKeyBytes(
-  keyData: ArrayBuffer,
+  keyData: BufferSource,
   {
     name = RSA_ALGORITHM,
     keyUsages = RSA_PRIVATE_KEY_USAGES,
@@ -223,7 +223,7 @@ export async function wrapKey(
 }
 
 export async function unwrapRawKey(
-  wrappedKey: ArrayBuffer,
+  wrappedKey: BufferSource,
   unwrappingKey: CryptoKey,
   unwrappedKeyOptions: RsaUnwrappedKeyOptions,
   unwrapOptions?: RsaOaepOptions
@@ -232,7 +232,7 @@ export async function unwrapRawKey(
 }
 
 export async function unwrapJWKKey(
-  wrappedKey: ArrayBuffer,
+  wrappedKey: BufferSource,
   unwrappingKey: CryptoKey,
   unwrappedKeyOptions: RsaUnwrappedKeyOptions,
   unwrapOptions?: RsaOaepOptions
@@ -241,7 +241,7 @@ export async function unwrapJWKKey(
 }
 
 export async function unwrapPrivateKey(
-  wrappedKey: ArrayBuffer,
+  wrappedKey: BufferSource,
   unwrappingKey: CryptoKey,
   unwrappedKeyOptions: RsaUnwrappedKeyOptions,
   unwrapOptions?: RsaOaepOptions
@@ -250,7 +250,7 @@ export async function unwrapPrivateKey(
 }
 
 export async function unwrapPublicKey(
-  wrappedKey: ArrayBuffer,
+  wrappedKey: BufferSource,
   unwrappingKey: CryptoKey,
   unwrappedKeyOptions: RsaUnwrappedKeyOptions,
   unwrapOptions?: RsaOaepOptions
@@ -260,7 +260,7 @@ export async function unwrapPublicKey(
 
 export async function unwrapKey(
   format: KeyFormat,
-  wrappedKey: ArrayBuffer,
+  wrappedKey: BufferSource,
   unwrappingKey: CryptoKey,
   {
     algorithm: unwrappedKeyAlgorithm,

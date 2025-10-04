@@ -1,11 +1,6 @@
-/**
- * @jest-environment node
- */
 
-import { describe, expect, test } from "@jest/globals"
-
-import * as aes from "~encryption/aes"
-import { concatArrayBuffers, decodeBuf, encodeStr, getRandomBytes } from "~encryption/bytes"
+import * as aes from "../aes"
+import { concatBuffers, decodeBuf, encodeStr, getRandomBytes } from "../bytes"
 
 describe("aes", () => {
   test.each([[["encrypt"]], [["decrypt"]], [["encrypt", "decrypt"]]] as [AESKeyUsage[]][])(
@@ -55,9 +50,9 @@ describe("aes", () => {
     [42, ["encrypt"]],
     [69, ["decrypt"]],
     [420, ["encrypt", "decrypt"]]
-  ] as [number, AESKeyUsage[]][])("invalid key length", (length, keyUsages) => {
+  ] as [number, AESKeyUsage[]][])("invalid key length", async (length, keyUsages) => {
     const keyData = getRandomBytes(length)
-    void expect(aes.cryptoKeyFromBuf(keyData, keyUsages)).rejects.toThrow()
+    await expect(aes.cryptoKeyFromBuf(keyData, keyUsages)).rejects.toThrow()
   })
 
   test("encrypt data", async () => {
@@ -83,7 +78,7 @@ describe("aes", () => {
     const data = encodeStr(secretText)
     const key = await aes.generateKey(["encrypt", "decrypt"])
     const { iv, cipherText } = await aes.encrypt(data, key)
-    const combinedCipher = concatArrayBuffers(iv, cipherText)
+    const combinedCipher = concatBuffers(iv, cipherText)
     const decrypted = await aes.decrypt(combinedCipher, key)
     expect(new Uint8Array(decrypted)).toEqual(data)
     const decoded = decodeBuf(decrypted)

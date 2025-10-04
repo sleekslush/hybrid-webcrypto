@@ -1,4 +1,4 @@
-export function b64FromBuf(buf: ArrayBuffer): string {
+export function b64FromBuf(buf: ArrayBufferLike): string {
   const encoded = ab2str(buf)
   return btoa(encoded)
 }
@@ -6,9 +6,10 @@ export function b64FromBuf(buf: ArrayBuffer): string {
 export function bufFromB64(str: string): ArrayBuffer {
   const decoded = atob(str)
 
-  const buf = new Uint8Array(decoded.length)
+  const buf = new ArrayBuffer(decoded.length)
+  const bufView = new Uint8Array(buf)
   for (let i = 0; i < decoded.length; ++i) {
-    buf[i] = decoded[i].charCodeAt(0)
+    bufView[i] = decoded[i].charCodeAt(0)
   }
 
   return buf
@@ -23,11 +24,11 @@ export function str2ab(str: string): ArrayBuffer {
   return buf
 }
 
-export function ab2str(buf: ArrayBuffer): string {
+export function ab2str(buf: ArrayBufferLike): string {
   return String.fromCharCode.apply(null, new Uint8Array(buf) as unknown as number[])
 }
 
-export function hexToBytes(hex: string): Uint8Array {
+export function hexToBytes(hex: string): BufferedUint8Array {
   const hexPairs = hex.match(/[0-9a-f]{2}/gi)
   if (hexPairs?.length !== hex.length / 2) {
     throw new Error("Invalid hex string")
@@ -39,11 +40,11 @@ export function bufToHex(buf: ArrayBuffer): string {
   return bytesToHex(new Uint8Array(buf))
 }
 
-export function bytesToHex(bytes: Uint8Array): string {
+export function bytesToHex(bytes: BufferedUint8Array): string {
   return [...bytes].map((byte) => byte.toString(16).padStart(2, "0")).join("")
 }
 
-export function encodeStr(str: string): Uint8Array {
+export function encodeStr(str: string): BufferedUint8Array {
   return new TextEncoder().encode(str)
 }
 
@@ -51,16 +52,15 @@ export function decodeBuf(buf: ArrayBuffer): string {
   return new TextDecoder().decode(buf)
 }
 
-export function getRandomBytes(length: number): Uint8Array {
+export function getRandomBytes(length: number): BufferedUint8Array {
   return crypto.getRandomValues(new Uint8Array(length))
 }
 
-export function concatArrayBuffers(...bufs: ArrayBuffer[]): Uint8Array {
-  const byteArrays = bufs.map((buf) => new Uint8Array(buf))
-  return concatByteArrays(...byteArrays)
+export function concatBuffers(...bufs: BufferedBytes[]): BufferedUint8Array {
+  return concatByteArrays(...bufs.map((buf) => new Uint8Array(buf)))
 }
 
-export function concatByteArrays(...byteArrays: Uint8Array[]): Uint8Array {
+export function concatByteArrays(...byteArrays: BufferedUint8Array[]): BufferedUint8Array {
   const combinedLength = sum(byteArrays, (byteArray) => byteArray.length)
   const combined = new Uint8Array(combinedLength)
 

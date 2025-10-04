@@ -1,4 +1,4 @@
-import { concatArrayBuffers, encodeStr, getRandomBytes, hexToBytes } from "./bytes"
+import { concatByteArrays, encodeStr, getRandomBytes, hexToBytes } from "./bytes"
 
 export const AES_ALGORITHM: AesEncryptionAlgorithm = "AES-GCM"
 const AES_KEYGEN_ALGORITHM: AesKeyGenAlgorithm = AES_ALGORITHM
@@ -37,19 +37,22 @@ export async function encryptToBytes(
   data: BufferSource,
   key: CryptoKey,
   options?: AesEncryptOptions
-): Promise<ArrayBuffer> {
+): Promise<BufferedUint8Array> {
   const { iv, cipherText } = await encrypt(data, key, options)
-  return concatArrayBuffers(iv, cipherText)
+  return concatByteArrays(new Uint8Array(iv), new Uint8Array(cipherText))
 }
 
 export async function decrypt(
-  data: ArrayBuffer,
+  data: BufferedBytes,
   key: CryptoKey,
   { ivLength = AES_IV_LENGTH, ...aesParams }: AesEncryptOptions = {}
 ): Promise<ArrayBuffer> {
   const iv = data.slice(0, ivLength)
   const cipherText = data.slice(ivLength)
-  return await decryptPayload({ iv, cipherText }, key, aesParams)
+  return await decryptPayload({ 
+    iv,
+    cipherText
+  }, key, aesParams)
 }
 
 export async function decryptPayload(
