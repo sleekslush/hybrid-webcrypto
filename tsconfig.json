@@ -21,8 +21,6 @@
     },
     "types": ["vitest/globals"]
   },
-  "include": [
-    "**/*",
-  ],
-  "exclude": ["../build"]
+  "include": ["src", "vitest.config.ts", "vite.config.ts", "eslint.config.js"],
+  "exclude": ["dist", "../build", "node_modules"]
 }

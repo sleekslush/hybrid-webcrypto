@@ -2,8 +2,23 @@
   "name": "hybrid-webcrypto",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
   "scripts": {
+    "build": "vite build",
     "test": "vitest"
   },
   "keywords": [],
@@ -32,6 +47,8 @@
   },
   "devDependencies": {
     "typescript": "^5.9.3",
+    "vite": "^5.4.8",
+    "vite-plugin-dts": "^4.3.0",
     "vitest": "^3.2.4"
   }
 }

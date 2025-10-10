@@ -1,3 +1,4 @@
+import type { DigestAlgorithm, DigestFn, DigestHexFn } from "./types"
 import { bufToHex } from "./bytes"
 
 export const sha256 = getDigestFn("SHA-256")

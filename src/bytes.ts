@@ -1,3 +1,5 @@
+import type { BufferedBytes, BufferedUint8Array } from "./types"
+
 export function b64FromBuf(buf: ArrayBufferLike): string {
   const encoded = ab2str(buf)
   return btoa(encoded)

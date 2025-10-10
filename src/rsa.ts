@@ -1,3 +1,25 @@
+import type {
+  PEMKeyType,
+  RsaArrayBufferPair,
+  RsaEncryptionAlgorithm,
+  RsaHashAlgorithm,
+  RsaImportKeyParams,
+  RsaImportPrivateKeyParams,
+  RsaImportPublicKeyParams,
+  RsaJsonWebKeyPair,
+  RsaKeyPairParams,
+  RsaKeyUsage,
+  RsaOaepOptions,
+  RsaPEMPair,
+  RsaPrivateKeyUsage,
+  RsaPublicKeyUsage,
+  RsaSigningAlgorithm,
+  RsaSigningKeyUsage,
+  RsaSigningParams,
+  RsaUnwrappedKeyOptions,
+  RsaVerifyPayload,
+  WrapKeys
+} from "./types"
 import { ab2str, str2ab } from "./bytes"
 
 const RSA_ALGORITHM: RsaEncryptionAlgorithm = "RSA-OAEP"

@@ -1,4 +1,5 @@
 
+import type { AESKeyUsage } from "../types"
 import * as aes from "../aes"
 import { concatBuffers, decodeBuf, encodeStr, getRandomBytes } from "../bytes"
 
